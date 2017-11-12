@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-COPY nats-streaming-server /nats-streaming-server
+ADD https://github.com/leenux/docker-library/blob/master/nats-streaming/nats-streaming-server /nats-streaming-server
 RUN chmod +x /nats-streaming-server
 
 RUN mkdir -p /data/nats-streaming/
