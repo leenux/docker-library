@@ -7,7 +7,7 @@ RUN apk update && \
 
 RUN wget -q https://github.com/nats-io/nats-streaming-server/releases/download/${NATSS_VERSION}/nats-streaming-server-${NATSS_VERSION}-linux-amd64.zip -O /tmp/nats-streaming-server.zip && \
     unzip /tmp/nats-streaming-server.zip -d / && \
-    mv /nats-streaming-server-${NATSS_VERSION}-linux-amd64 / && \
+    mv /nats-streaming-server-${NATSS_VERSION}-linux-amd64/nats-streaming-server / && \
     rm /tmp/nats-streaming-server.zip
 
 RUN chmod +x /nats-streaming-server
