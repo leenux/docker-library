@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-streaming
+  labels:
+    app: nats-streaming
+spec:
+  ports:
+  - port: 4222
+    name: mqc
+  - port: 8222
+    name: mqm
+  selector:
+    app: nats-streaming
+    tier: mq
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nats-streaming
+  labels:
+    app: nats-streaming
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nats-streaming
+        tier: mq
+    spec:
+      containers:
+      - image: leenux/nats-streaming
+        name: nats-streaming
+        command: ["sh", "-c", "/nats-streaming-server -p 4222 -m 8222 -store file -dir /data/nats-streaming/"]
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 4222
+          name: mqc
+        - containerPort: 8222
+          name: mqm
+        volumeMounts:
+        - name: ns-persistent-storage
+          mountPath: /data/nats-streaming
+      volumes:
+        - name: ns-persistent-storage
+          hostPath:
+            path: /data/nats-streaming
+
